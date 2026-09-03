@@ -1,21 +1,20 @@
-# Local development only — production pulls prebuilt images from GHCR
 services:
   db:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: kuchenteilen
-      POSTGRES_PASSWORD: kuchenteilen
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: kuchenteilen
     volumes:
       - pg_data:/var/lib/postgresql/data
     restart: unless-stopped
 
   backend:
-    build: ./server
+    image: ghcr.io/xblow/kuchenteilen-backend:latest
     environment:
-      DATABASE_URL: postgres://kuchenteilen:kuchenteilen@db:5432/kuchenteilen?sslmode=disable
+      DATABASE_URL: postgres://kuchenteilen:${DB_PASSWORD}@db:5432/kuchenteilen?sslmode=disable
       PORT: 8080
-      GIN_MODE: debug
+      GIN_MODE: release
     ports:
       - "8080:8080"
     depends_on:
@@ -23,10 +22,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    build:
-      context: ./app
-      args:
-        BASE_URL: ${BASE_URL:-}
+    image: ghcr.io/xblow/kuchenteilen-frontend:latest
     ports:
       - "3001:80"
     restart: unless-stopped
