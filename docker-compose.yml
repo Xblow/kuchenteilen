@@ -29,11 +29,9 @@ services:
   caddy:
     image: caddy:alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - "3001:80"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
     depends_on:
       - frontend
       - backend
@@ -41,4 +39,3 @@ services:
 
 volumes:
   pg_data:
-  caddy_data:

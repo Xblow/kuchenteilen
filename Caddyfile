@@ -1,8 +1,8 @@
-andreipopescu.dev {
+:80 {
     handle /api/* {
         reverse_proxy backend:8080
     }
-    handle /app/kuchenteilen/* {
+    handle {
         reverse_proxy frontend:80
     }
 }
