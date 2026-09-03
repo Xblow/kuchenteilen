@@ -1,0 +1,21 @@
+# Secrets
+.env
+.env.local
+
+# Claude Code
+.claude/
+
+# Frontend
+app/node_modules/
+app/.expo/
+app/dist/
+
+# Backend
+server/kt
+server/admincli
+
+# Caddy
+caddy_data/
+
+# OS
+.DS_Store

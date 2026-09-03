@@ -1,0 +1,1 @@
+gcloud compute ssh --zone "europe-west3-b" "instance-20260901-de" --project "project-a766f4d6-a64b-4b48-88a"
