@@ -20,7 +20,10 @@ services:
     restart: unless-stopped
 
   frontend:
-    build: ./app
+    build:
+      context: ./app
+      args:
+        BASE_URL: ${BASE_URL:-}
     restart: unless-stopped
 
   caddy:

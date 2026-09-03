@@ -1,8 +1,8 @@
-yourdomain.com {
+andreipopescu.dev {
     handle /api/* {
         reverse_proxy backend:8080
     }
-    handle {
+    handle /app/kuchenteilen/* {
         reverse_proxy frontend:80
     }
 }
