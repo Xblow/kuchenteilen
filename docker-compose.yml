@@ -1,3 +1,4 @@
+# Local development only — not used in production (services deploy independently)
 services:
   db:
     image: postgres:16-alpine
@@ -14,7 +15,9 @@ services:
     environment:
       DATABASE_URL: postgres://kuchenteilen:kuchenteilen@db:5432/kuchenteilen?sslmode=disable
       PORT: 8080
-      GIN_MODE: release
+      GIN_MODE: debug
+    ports:
+      - "8080:8080"
     depends_on:
       - db
     restart: unless-stopped
@@ -24,17 +27,8 @@ services:
       context: ./app
       args:
         BASE_URL: ${BASE_URL:-}
-    restart: unless-stopped
-
-  caddy:
-    image: caddy:alpine
     ports:
       - "3001:80"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-    depends_on:
-      - frontend
-      - backend
     restart: unless-stopped
 
 volumes:
