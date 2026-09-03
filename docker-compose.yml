@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: kuchenteilen
+      POSTGRES_PASSWORD: kuchenteilen
+      POSTGRES_DB: kuchenteilen
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    build: ./server
+    environment:
+      DATABASE_URL: postgres://kuchenteilen:kuchenteilen@db:5432/kuchenteilen?sslmode=disable
+      PORT: 8080
+      GIN_MODE: release
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  frontend:
+    build: ./app
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+
+volumes:
+  pg_data:
+  caddy_data:
