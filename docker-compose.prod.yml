@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: kuchenteilen
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: kuchenteilen
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    image: ghcr.io/xblow/kuchenteilen-backend:latest
+    environment:
+      DATABASE_URL: postgres://kuchenteilen:${DB_PASSWORD}@db:5432/kuchenteilen?sslmode=disable
+      PORT: 8080
+      GIN_MODE: release
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/xblow/kuchenteilen-frontend:latest
+    ports:
+      - "3001:80"
+    restart: unless-stopped
+
+volumes:
+  pg_data:
